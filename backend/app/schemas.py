@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, EmailStr
 
@@ -59,7 +60,7 @@ class WordOut(BaseModel):
 class AnswerSubmit(BaseModel):
     word_id: int
     answer: str
-    session_type: str  # today, review, weak
+    session_type: Literal["today", "review", "weak"]
     used_hint: bool = False
 
 

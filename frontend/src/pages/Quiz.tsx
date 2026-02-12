@@ -51,20 +51,24 @@ export default function Quiz() {
       return;
     }
     if (!answer.trim()) return;
-    const res = await api.post('/api/learning/answer', {
-      word_id: word.id,
-      answer: answer.trim(),
-      session_type: mode,
-      used_hint: usedHint,
-    });
-    const data: AnswerResult = res.data;
-    setResult(data);
-    if (data.is_correct && !usedHint) {
-      setScore((s) => ({ ...s, correct: s.correct + 1 }));
-    } else if (data.is_correct && usedHint) {
-      setScore((s) => ({ ...s, hint: s.hint + 1 }));
-    } else {
-      setScore((s) => ({ ...s, incorrect: s.incorrect + 1 }));
+    try {
+      const res = await api.post('/api/learning/answer', {
+        word_id: word.id,
+        answer: answer.trim(),
+        session_type: mode,
+        used_hint: usedHint,
+      });
+      const data: AnswerResult = res.data;
+      setResult(data);
+      if (data.is_correct && !usedHint) {
+        setScore((s) => ({ ...s, correct: s.correct + 1 }));
+      } else if (data.is_correct && usedHint) {
+        setScore((s) => ({ ...s, hint: s.hint + 1 }));
+      } else {
+        setScore((s) => ({ ...s, incorrect: s.incorrect + 1 }));
+      }
+    } catch {
+      alert('通信エラーが発生しました。もう一度お試しください。');
     }
   };
 
@@ -86,6 +90,14 @@ export default function Quiz() {
     inputRef.current?.focus();
   };
 
+  if (!word && !finished) {
+    return (
+      <div className="quiz-result">
+        <h2>問題がありません</h2>
+        <button className="btn-primary" onClick={() => navigate('/child')}>メニューに戻る</button>
+      </div>
+    )
+  }
   if (finished) {
     return (
       <div className="quiz-result">
@@ -104,14 +116,6 @@ export default function Quiz() {
     );
   }
 
-  if (!word) {
-    return (
-      <div className="quiz-result">
-        <h2>問題がありません</h2>
-        <button className="btn-primary" onClick={() => navigate('/child')}>メニューに戻る</button>
-      </div>
-    );
-  }
 
   const isCorrect = result?.is_correct && !usedHint;
   const isHintCorrect = result?.is_correct && usedHint;

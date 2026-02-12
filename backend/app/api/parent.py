@@ -88,8 +88,8 @@ def update_child_password(
 @router.get("/children/{child_id}/stats", response_model=list[DailyStat])
 def child_stats(
     child_id: int,
-    year: int = Query(...),
-    month: int = Query(...),
+    year: int = Query(..., qe=2000, le=2100),
+    month: int = Query(..., ge=1, le=12),
     parent: User = Depends(require_parent),
     db: Session = Depends(get_db),
 ):

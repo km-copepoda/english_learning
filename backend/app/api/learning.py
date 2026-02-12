@@ -207,8 +207,8 @@ def menu_status(
 
 @router.get("/stats")
 def my_stats(
-    year: int = Query(...),
-    month: int = Query(...),
+    year: int = Query(..., qe=2000, le=2100),
+    month: int = Query(..., ge=1, le=12),
     child: User = Depends(require_child),
     db: Session = Depends(get_db),
 ):
