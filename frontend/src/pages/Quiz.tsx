@@ -128,7 +128,7 @@ export default function Quiz() {
       </div>
       <div className="quiz-card">
         <div className="quiz-reading">
-          {showHint ? (
+          {showHint || (result && !result.is_correct) ? (
             <span><span className="hint-color">読み: </span>{word.english_katakana}</span>
           ) : '\u00A0'}
         </div>
@@ -142,7 +142,7 @@ export default function Quiz() {
         </div>
         <div className="quiz-feedback">
           {result && !result.is_correct ? (
-            <span>正解: {result.correct_answer}　カタカナ: {result.english_katakana}</span>
+            <span>正解: {result.correct_answer}</span>
           ) : '\u00A0'}
         </div>
         <form onSubmit={handleSubmit}>
