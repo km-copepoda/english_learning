@@ -195,7 +195,7 @@ class TestParent:
         assert banana is not None
         assert banana["hint_count"] == 2
         assert banana["total_attempts"] == 5
-        assert banana["correct_count"] == 3
+        assert banana["correct_count"] == 1
 
     def test_parent_endpoints_require_parent_role(self, client, child_headers):
         res = client.get("/api/parent/children", headers=child_headers)

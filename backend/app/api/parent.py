@@ -296,7 +296,7 @@ def _get_weak_words(db: Session, child_id: int, sort_by: str, order: str) -> lis
             japanese=row.japanese,
             english_katakana=row.english_katakana,
             total_attempts=row.total_attempts,
-            correct_count=row.correct_count or 0,
+            correct_count=pure,
             hint_count=row.hint_count or 0,
             accuracy=accuracy,
         ))
