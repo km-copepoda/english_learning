@@ -43,7 +43,22 @@ def today_words(
     else:
         last_date_jst = (progress.last_section_date + timedelta(hours=9)).date()
         if last_date_jst != today_jst:
-            progress.current_section += 1
+            section_word_ids = db.query(Word.id).filter(
+                Word.section == progress.current_section
+            )
+            total_words = section_word_ids.count()
+            answered_count = (
+                db.query(LearningRecord.word_id)
+                .filter(
+                    LearningRecord.child_id == child.id,
+                    LearningRecord.session_type == "today",
+                    LearningRecord.word_id.in_(section_word_ids),
+                )
+                .distinct()
+                .count()
+            )
+            if total_words > 0 and answered_count >= total_words:
+                progress.current_section += 1
             progress.last_section_date = datetime.now(timezone.utc)
             db.commit()
 
