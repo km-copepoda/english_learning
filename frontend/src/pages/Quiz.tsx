@@ -133,18 +133,6 @@ export default function Quiz() {
           ) : '\u00A0'}
         </div>
         <div className="quiz-japanese">{word.japanese}</div>
-        <div className="quiz-mark">
-          {result ? (
-            result.is_correct
-              ? <span className="correct">&#9675;</span>
-              : <span className="incorrect">&#10005;</span>
-          ) : '\u00A0'}
-        </div>
-        <div className="quiz-feedback">
-          {result && !result.is_correct ? (
-            <span>正解: {result.correct_answer}</span>
-          ) : '\u00A0'}
-        </div>
         <form onSubmit={handleSubmit}>
           <div className="quiz-input-row">
             <span style={{ color: '#1976d2' }}>英:</span>
@@ -155,6 +143,17 @@ export default function Quiz() {
               onChange={(e) => setAnswer(e.target.value)}
               readOnly={!!result}
             />
+            <span className="quiz-mark-inline">
+              {result ? (
+                result.is_correct
+                  ? <span className="correct">&#9675;</span>
+                  : <span className="incorrect">&#10005;</span>
+              ) : '\u00A0'}
+            </span>
+          </div><div className="quiz-feedback">
+            {result ? (
+              <span>正解: {result.correct_answer}</span>
+            ) : '\u00A0'}
           </div>
           <div className="quiz-actions">
             {!result && (
