@@ -127,12 +127,12 @@ export default function Quiz() {
         <button className="btn-secondary" onClick={() => navigate('/child')}>やめる</button>
       </div>
       <div className="quiz-card">
+        <div className="quiz-japanese">{word.japanese}</div>
         <div className="quiz-reading">
-          {showHint || (result && !result.is_correct) ? (
+          {showHint || result ? (
             <span><span className="hint-color">読み: </span>{word.english_katakana}</span>
           ) : '\u00A0'}
         </div>
-        <div className="quiz-japanese">{word.japanese}</div>
         <form onSubmit={handleSubmit}>
           <div className="quiz-input-row">
             <span style={{ color: '#1976d2' }}>英:</span>
