@@ -19,6 +19,7 @@ export default function Quiz() {
   const [usedHint, setUsedHint] = useState(false);
   const [loading, setLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const finishBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let url = '';
@@ -32,8 +33,12 @@ export default function Quiz() {
   }, [mode, period]);
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, [current, loading]);
+    if (finished) {
+      finishBtnRef.current?.focus();
+    } else {
+      inputRef.current?.focus();
+    }
+  }, [current, loading, finished]);
 
   if (loading) return <div>読み込み中...</div>;
 
@@ -89,9 +94,9 @@ export default function Quiz() {
         <p>ヒント正解数: {score.hint}</p>
         <p>不正解数: {score.incorrect}</p>
         <button
+          ref={finishBtnRef}
           className="btn-primary"
           onClick={() => navigate('/child')}
-          onKeyDown={(e) => e.key === 'Enter' && navigate('/child')}
         >
           メニューに戻る (Enter)
         </button>
@@ -144,7 +149,7 @@ export default function Quiz() {
               className={`quiz-input ${result ? (result.is_correct ? 'correct' : 'incorrect') : ''}`}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              disabled={!!result}
+              readOnly={!!result}
             />
           </div>
           <div className="quiz-actions">
