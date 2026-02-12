@@ -26,6 +26,7 @@ export interface AnswerResult {
 
 export interface MenuStatus {
   today: number;
+  studied_today: boolean;
   review_week: number;
   review_month: number;
   review_over_month: number;

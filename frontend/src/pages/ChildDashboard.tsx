@@ -36,6 +36,12 @@ export default function ChildDashboard() {
         <h1>{user?.username} さん</h1>
         <button className="btn-secondary" onClick={() => { logout(); navigate('/login'); }}>ログアウト</button>
       </div>
+      <div className="today-status">
+        {menu!.studied_today
+          ? <span className="today-done">今日の学習 OK!</span>
+          : <span className="todo-not-yet">今日はまだ学習していません</span>
+        }
+      </div>
       <h2>学習メニュー</h2>
       <div className="menu-list">
         {/* 今日の単語学習 */}

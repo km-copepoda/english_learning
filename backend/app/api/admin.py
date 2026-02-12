@@ -19,7 +19,7 @@ async def import_words(
 ):
     content = await file.read()
     text = content.decode("utf-8-sig")
-    reader = csv.DictReader(io.StringIO(text), fieldnames=["japanese", "english", "english_katakana", "section"],)
+    reader = csv.DictReader(io.StringIO(text))
 
     imported = 0
     skipped = 0

@@ -184,6 +184,17 @@ def menu_status(
     progress = _get_progress(db, child.id)
     today_count = db.query(Word).filter(Word.section == progress.current_section).count()
 
+    today_jst = _get_today_jst().date().isoformat()
+    studied_today = (
+        db.query(LearningRecord)
+        .filter(
+            LearningRecord.child_id == child.id,
+            func.date(LearningRecord.answered_at, "+9 hours")
+            == today_jst,
+        )
+        .first()
+    ) is not None
+
     review_week = len(_get_learned_word_ids(db, child.id, "week"))
     review_month = len(_get_learned_word_ids(db, child.id, "month"))
     review_over_month = len(_get_learned_word_ids(db, child.id, "over_month"))
@@ -195,6 +206,7 @@ def menu_status(
 
     return MenuStatus(
         today=today_count,
+        studied_today=studied_today,
         review_week=review_week,
         review_month=review_month,
         review_over_month=review_over_month,
@@ -207,7 +219,7 @@ def menu_status(
 
 @router.get("/stats")
 def my_stats(
-    year: int = Query(..., qe=2000, le=2100),
+    year: int = Query(..., ge=2000, le=2100),
     month: int = Query(..., ge=1, le=12),
     child: User = Depends(require_child),
     db: Session = Depends(get_db),

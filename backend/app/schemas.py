@@ -80,6 +80,7 @@ class QuizWord(BaseModel):
 
 class MenuStatus(BaseModel):
     today: int
+    studied_today: bool
     review_week: int
     review_month: int
     review_over_month: int
