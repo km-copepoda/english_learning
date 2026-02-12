@@ -2,7 +2,7 @@ services:
   backend:
     build: ./backend
     volumes:
-      - db-data:/app/data
+      - ./db-data:/app/data
     environment:
       - DATABASE_URL=sqlite:////app/data/vocab.db
       - SECRET_KEY=change-me-in-production
@@ -13,5 +13,3 @@ services:
       - "3000:80"
     depends_on:
       - backend
-volumes:
-  db-data:

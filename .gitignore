@@ -43,6 +43,7 @@ wheels
 # --- Databases ---
 .sqlite3
 .db
+**/*.db
 
 # --- IDE  Editors ---
 .vscode
