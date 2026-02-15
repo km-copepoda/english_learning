@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#1976d2"/>
+  <text x="256" y="200" text-anchor="middle" font-size="120" font-weight="bold" fill="#fff" font-family="Arial, sans-serif">ABC</text>
+  <text x="256" y="340" text-anchor="middle" font-size="80" fill="#bbdefb" font-family="Arial, sans-serif">英単語</text>
+  <rect x="100" y="380" width="312" height="8" rx="4" fill="#bbdefb" opacity="0.5"/>
+</svg>

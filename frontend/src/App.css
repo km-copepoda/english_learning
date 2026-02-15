@@ -5,8 +5,19 @@ body {
   background: #f5f5f5;
   color: #333;
   line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
 }
-.app { max-width: 800px; margin: 0 auto; padding: 20px; }
+input, textarea { -webkit-user-select: text; user-select: text; }
+.app {
+  max-width: 800px; margin: 0 auto;
+  padding: 20px;
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  min-height: 100dvh;
+}
 
 /* Auth Page */
 .auth-page {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/client';
 import { QuizWord, AnswerResult } from '../types';
@@ -18,8 +18,59 @@ export default function Quiz() {
   const [showHint, setShowHint] = useState(false);
   const [usedHint, setUsedHint] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [countdown, setCountdown] = useState(30);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const finishBtnRef = useRef<HTMLButtonElement>(null);
+  const currentRef = useRef(current);
+  const usedHintRef = useRef(usedHint);
+  currentRef.current = current;
+  usedHintRef.current = usedHint;
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const startTimer = useCallback(() => {
+    stopTimer();
+    let remaining = 30;
+    setCountdown(30);
+    timerRef.current = setInterval(() => {
+      remaining -= 1;
+      setCountdown(remaining);
+      if (remaining <= 0) {
+        stopTimer();
+        // タイムアウト：不正解として自動送信
+        const wordId = words[currentRef.current]?.id;
+        if (!wordId) return;
+        api.post('/api/learning/answer', {
+          word_id: wordId,
+          answer: '',
+          session_type: mode,
+          used_hint: usedHintRef.current,
+        }).then((res) => {
+          const data: AnswerResult = res.data;
+          setResult(data);
+          setScore((s) => ({ ...s, incorrect: s.incorrect + 1 }));
+        }).catch(() => {
+          alert('通信エラーが発生しました。');
+        });
+      }
+    }, 1000);
+  }, [words, mode, stopTimer]);
+
+  // 問題が変わったらタイマー開始、回答済み/終了時は停止
+  useEffect(() => {
+    if (finished || loading || result) {
+      stopTimer();
+      return;
+    }
+    startTimer();
+    return stopTimer;
+  }, [current, finished, loading, result, startTimer, stopTimer]);
 
   useEffect(() => {
     let url = '';
@@ -124,6 +175,11 @@ export default function Quiz() {
     <div>
       <div className="quiz-header">
         <span>{current + 1} / {words.length}</span>
+        {!result && (
+          <span style={{ color: countdown <= 5 ? '#e53935' : countdown <= 15 ? '#f9a825' : '#4caf50', fontWeight: countdown <= 5 ? 'bold' : 'normal' }}>
+            残り {countdown}秒
+          </span>
+        )}
         <button className="btn-secondary" onClick={() => navigate('/child')}>やめる</button>
       </div>
       <div className="quiz-card">
